@@ -1,0 +1,56 @@
+12345
+56789
+
+rechnung    	index
+1*5		1u1
+1*6+2*5		1u2 2u1
+1*7+2*6+3*1	1u3 2u2 3u1
+		1u4 2u3 3u2 4u1
+		1u5 2u4 3u3 4u2 5u1
+		    2u5 3u4 4u3 5u2
+			3u5 4u4 5u3
+			    4u5 5u4
+				5u5	
+Initialisierung
+---------------
+-es gibt den übertragungsfunktions vektor(matrize) trans_func
+-dieser wird mit einer formel ermittelt, die indizes der x achse werden in eine zweite zeile in trans_func geschrieben
+-es gibt das eingangs signal als vektor sig_in, indizes der x achse werden hier auch in eine zweite zweile geschrieben
+-für die unterscheidung zwischen kontinuierlich und diskret, werden die abständer zwischen den x werten verkleiner
+-für sig_in muss man über eingabe zwischen dirac und rechteckfunktion(fläche 1) schalten können
+-variable sig_in_orig length wird ermittelt(horizontal)
+
+revision 0.1
+die x werte werden in der ersten zeile gespeichert für eine bessere handhabbarkeit 
+
+
+
+Vorbereitung
+---------- 
+-die werte in sig_in werden gespiegel/flip, auch die indizes->funktion(flip)  matlabfunktion flilr
+-um die länge des vektors sig_in nach links und rechts mit nullen erweitern(extend_with_zero), die indizes werden weitergeführt
+-um die länge des vektors sig_in nach links verschieben, den rest mit nullen auffüllen(indizes auch), es entsteht vektor b->function(shift(length,direction('l','r'),filling(hier 0))
+-neue funktion(prepare_sign_in(sig_in) ruft funktion flip, extend_with_zero, shift auf. ausgabe der gedrehte und mit nullen aufgefüllte vektor
+-neue variable sig_in_ext_len
+-neuen vektor mit der länge sig_in_ext_len erstellen, der nur aus 0 besteht, mit den gleichen indizes wie sig_in
+
+
+Berechnung
+----------
+eine schleife die sign_in_orig - sig_in_ext_len läuft
+-jeden wert der sig_in mit trans_func miteinander multiplizieren und davon die summe bilden
+{
+-der indexwert der x achse steht in der zweiten zeile des trans_func, mithilfe der zählvar in der schleife wird der index aus der trans_func entnommen und in die "zweite" zeile des ergebnisverktors geschrieb
+-beim gleichen index der zählschleife wird der summierte werte in die erste zeile geschrieben
+-hier ein sleep einbauen, für kontinuierliche kurz, für diskret länger
+-am ende jedes berechnungsschrittes wird die funktion my_custom_plot aufgerufen
+}
+
+Darstellung
+-----------
+funktion my_custom_plot
+y oben > höchster wert der ersten zeile von trans_func, sig_in, ergebniss
+y unten > niedrigster  ------------------------||------------------------
+x links sig_in(1)
+x rechts sig_in(max)
+
